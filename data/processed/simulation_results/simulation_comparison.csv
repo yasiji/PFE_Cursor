@@ -1,0 +1,3 @@
+policy,total_demand,total_ordered,total_waste,total_stockouts,service_level,waste_rate,total_markdown_sales,total_markdown_revenue,waste_pct,stockout_pct,service_level_pct,waste_after_markdown,waste_after_markdown_pct
+heuristic,4008.63,8450.0,5943.41539092038,0.0,1.0,0.8773144977917524,0.0,0.0,70.34,0.0,100.0,5943.41539092038,70.34
+model_based,4008.63,140202.98822970834,104728.63106818983,0.0,1.0,0.7721582784645586,7385.118,37764.519,74.7,0.0,100.0,97343.51306818983,69.43

@@ -1,0 +1,25 @@
+# Production Environment Overrides
+# Inherits from config.yaml and overrides for production
+
+data:
+  dataset_path: "data/raw"
+  cache_dir: "data/processed"
+
+logging:
+  level: "INFO"
+  format: "json"  # Structured logging for production
+
+database:
+  url: "${DATABASE_URL}"  # Use environment variable
+  echo: false
+
+models:
+  forecasting:
+    horizon_days: 7
+    model_type: "lightgbm"
+
+performance:
+  batch_size: 5000
+  max_workers: 8
+  cache_ttl_seconds: 1800
+

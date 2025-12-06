@@ -1,0 +1,21 @@
+# Development Environment Overrides
+# Inherits from config.yaml and overrides for development
+
+data:
+  dataset_path: "data/raw_dev"
+  cache_dir: "data/processed_dev"
+
+logging:
+  level: "DEBUG"
+  format: "text"  # Human-readable for development
+
+database:
+  url: "sqlite:///./data/replenishment_dev.db"
+  echo: true  # Show SQL queries in development
+
+models:
+  forecasting:
+    horizon_days: 7
+    # Use smaller models for faster iteration in dev
+    model_type: "lightgbm"
+

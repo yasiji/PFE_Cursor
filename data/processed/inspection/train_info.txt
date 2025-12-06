@@ -1,0 +1,59 @@
+Dataset Split: train
+================================================================================
+
+Shape: (182500, 17)
+
+Columns:
+['date', 'store_id', 'sku_id', 'category', 'subcategory', 'quantity', 'price', 'revenue', 'promotion', 'discount', 'stockout', 'stock_level', 'weather_bucket', 'temperature', 'day_of_week', 'is_weekend', 'month']
+
+Data Types:
+date              datetime64[ns]
+store_id                  object
+sku_id                    object
+category                  object
+subcategory               object
+quantity                   int64
+price                    float64
+revenue                  float64
+promotion                  int64
+discount                 float64
+stockout                   int64
+stock_level                int64
+weather_bucket            object
+temperature              float64
+day_of_week                int64
+is_weekend                 int64
+month                      int64
+dtype: object
+
+Missing Values:
+                Missing Count  Missing %
+date                        0        0.0
+store_id                    0        0.0
+sku_id                      0        0.0
+category                    0        0.0
+subcategory                 0        0.0
+quantity                    0        0.0
+price                       0        0.0
+revenue                     0        0.0
+promotion                   0        0.0
+discount                    0        0.0
+stockout                    0        0.0
+stock_level                 0        0.0
+weather_bucket              0        0.0
+temperature                 0        0.0
+day_of_week                 0        0.0
+is_weekend                  0        0.0
+month                       0        0.0
+
+Numeric Statistics:
+            quantity          price        revenue      promotion       discount       stockout    stock_level    temperature    day_of_week     is_weekend          month
+count  182500.000000  182500.000000  182500.000000  182500.000000  182500.000000  182500.000000  182500.000000  182500.000000  182500.000000  182500.000000  182500.000000
+mean       15.034532       8.516421     125.560882       0.098844       0.019766       0.049726      31.682592      20.016922       3.008219       0.287671       6.526027
+std         7.380593       3.757280      87.853289       0.298453       0.062405       0.217379      12.176673       5.767689       2.003410       0.452678       3.447861
+min         0.000000       2.000000       0.000000       0.000000       0.000000       0.000000       1.000000      10.000000       0.000000       0.000000       1.000000
+25%        10.000000       5.260000      59.690000       0.000000       0.000000       0.000000      23.000000      15.000000       1.000000       0.000000       4.000000
+50%        14.000000       8.530000     108.465000       0.000000       0.000000       0.000000      30.000000      20.000000       3.000000       0.000000       7.000000
+75%        20.000000      11.780000     174.030000       0.000000       0.000000       0.000000      39.000000      25.000000       5.000000       1.000000      10.000000
+max        54.000000      15.000000     808.180000       1.000000       0.300000       1.000000      92.000000      30.000000       6.000000       1.000000      12.000000
+

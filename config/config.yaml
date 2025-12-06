@@ -1,0 +1,126 @@
+# Base Configuration
+# Environment-specific overrides in dev.yaml and prod.yaml
+
+data:
+  dataset_path: "data/raw"
+  processed_path: "data/processed"
+  cache_dir: "data/processed"
+  models_dir: "data/models"
+  hf_dataset_name: "FreshRetailNet-50K"
+  hf_cache_dir: "data/hf_cache"
+
+models:
+  forecasting:
+    horizon_days: 7
+    model_type: "lightgbm"
+    default_service_level: 0.95
+    safety_factor: 1.65  # z-score for 95% service level
+    
+    # LightGBM model parameters (selected model)
+    lightgbm:
+      objective: "regression"
+      metric: "rmse"
+      boosting_type: "gbdt"
+      num_leaves: 31
+      learning_rate: 0.05
+      feature_fraction: 0.9
+      bagging_fraction: 0.8
+      bagging_freq: 5
+      num_boost_round: 200
+      early_stopping_rounds: 20
+      verbose: -1
+      
+    # Feature engineering parameters
+    features:
+      lags: [1, 7, 14, 28]
+      rolling_windows: [7, 14, 28]
+      include_calendar: true
+      include_weather: true
+      include_promo: true
+      
+    # Model path (relative to data/models_dir)
+    model_path: "lightgbm_model.pkl"
+
+  replenishment:
+    target_coverage_days: 7
+    min_order_quantity: 1
+    case_pack_size: 1  # Default, can be overridden per SKU
+    max_order_quantity: 1000
+
+  markdown:
+    expiry_buckets:
+      - days_before_expiry: 3
+        discount_percent: 20
+      - days_before_expiry: 2
+        discount_percent: 35
+      - days_before_expiry: 1
+        discount_percent: 50
+
+# Shelf life assumptions (days) per category
+# Category IDs are numeric (from first_category_id in dataset)
+shelf_life:
+  # Named categories (for reference)
+  fruits: 5
+  vegetables: 7
+  bakery: 3
+  chilled: 7
+  
+  # Numeric category ID mappings (from MVP subset analysis)
+  category_mapping:
+    0: 5   # Medium shelf-life
+    3: 3   # Short shelf-life
+    4: 7   # Longer shelf-life (largest category)
+    5: 5   # Medium shelf-life
+    7: 5   # Medium shelf-life
+    8: 7   # Longer shelf-life
+    10: 5  # Medium shelf-life
+    11: 3  # Short shelf-life
+    13: 3  # Short shelf-life
+    14: 3  # Short shelf-life
+    15: 3  # Short shelf-life
+    16: 7  # Longer shelf-life
+    18: 5  # Medium shelf-life
+    20: 7  # Longer shelf-life
+    21: 5  # Medium shelf-life
+    22: 3  # Short shelf-life
+    23: 3  # Short shelf-life
+    24: 5  # Medium shelf-life
+    25: 3  # Short shelf-life
+    27: 3  # Short shelf-life
+    28: 3  # Short shelf-life
+    29: 3  # Short shelf-life
+    30: 3  # Short shelf-life
+    31: 5  # Medium shelf-life
+  
+  default: 5  # Default shelf-life for unmapped categories
+
+# API Configuration
+api:
+  host: "0.0.0.0"
+  port: 8000
+  version: "v1"
+  timeout: 30.0
+
+# Logging
+logging:
+  level: "INFO"
+  format: "json"  # or "text" for development
+  service_name: "replenishment-manager"
+
+# Database
+database:
+  url: "sqlite:///./data/replenishment.db"
+  echo: false  # Set to true for SQL query logging
+
+# Authentication
+auth:
+  jwt_secret_key: "change-this-secret-key-in-production-use-env-var"
+  jwt_algorithm: "HS256"
+  access_token_expire_minutes: 30
+
+# Performance
+performance:
+  batch_size: 1000
+  max_workers: 4
+  cache_ttl_seconds: 3600
+

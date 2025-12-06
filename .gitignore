@@ -1,0 +1,68 @@
+# Virtual environments
+PFE/
+venv/
+.venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Node
+node_modules/
+apps/store-manager-frontend/node_modules/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.cursor/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+
+# Test & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Database (keep structure, ignore data)
+*.db
+!data/.gitkeep
+
+# Large data files
+data/hf_cache/
+data/raw/*.parquet
+data/raw/*.csv
+FreshRetailNet-50K/
+
+# Model files (optional - remove if you want to include)
+# data/models/*.pkl
+
+# Temporary
+*.tmp
+*.temp
+*.bak
+
+# Build outputs
+apps/store-manager-frontend/dist/

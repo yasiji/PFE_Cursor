@@ -1,0 +1,45 @@
+# 🚀 Fresh Product Replenishment Manager - Docker Compose
+#
+# Quick Start:
+#   docker-compose up -d
+#
+# Access:
+#   - Frontend:     http://localhost
+#   - API Docs:     http://localhost:8000/docs
+#   - ML Dashboard: http://localhost:8501
+#   - Login:        test_user / test123
+#
+# Stop:
+#   docker-compose down
+
+version: '3.8'
+
+services:
+  # All-in-one container (Frontend + Backend + Streamlit)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.allinone
+    container_name: pfe-replenishment
+    ports:
+      - "80:80"       # Frontend (React)
+      - "8000:8000"   # API (FastAPI)
+      - "8501:8501"   # ML Dashboard (Streamlit)
+    environment:
+      - ENVIRONMENT=prod
+      - PYTHONPATH=/app
+      - AUTH_JWT_SECRET_KEY=${JWT_SECRET_KEY:-your-super-secret-key-change-in-production}
+    volumes:
+      - pfe-data:/app/data  # Persist database
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+volumes:
+  pfe-data:
+    driver: local
+

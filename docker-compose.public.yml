@@ -1,0 +1,46 @@
+# Docker Compose for Public Deployment
+# Anyone can use this file to run the application
+# 
+# Usage:
+#   1. Save this file as docker-compose.yml
+#   2. Run: docker-compose up -d
+#   3. Open http://localhost in your browser
+#
+# Replace DOCKERHUB_USER with the actual Docker Hub username
+
+version: '3.8'
+
+services:
+  backend:
+    image: ${DOCKERHUB_USER:-yourusername}/pfe-replenishment-backend:${VERSION:-latest}
+    container_name: pfe-backend
+    ports:
+      - "8000:8000"
+      - "8501:8501"
+    environment:
+      - ENVIRONMENT=prod
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-change-this-secret-key-in-production}
+      - API_ALLOWED_ORIGINS=http://localhost,http://localhost:80
+    volumes:
+      - pfe-data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+  frontend:
+    image: ${DOCKERHUB_USER:-yourusername}/pfe-replenishment-frontend:${VERSION:-latest}
+    container_name: pfe-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  pfe-data:
+
