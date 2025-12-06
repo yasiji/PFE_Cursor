@@ -48,7 +48,10 @@ htmlcov/
 
 # Database (keep structure, ignore data)
 *.db
-!data/.gitkeep
+
+# Keep .gitkeep files
+!.gitkeep
+!**/.gitkeep
 
 # Large data files
 data/hf_cache/
