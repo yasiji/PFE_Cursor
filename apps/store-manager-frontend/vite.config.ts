@@ -16,7 +16,14 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: 3000,
-      host: true, // Allow external connections (for Docker)
+      host: true, // Allow external connections
+      allowedHosts: [
+        'localhost',
+        '127.0.0.1',
+        '.ngrok.io',
+        '.ngrok-free.app',
+        '.ngrok.app',
+      ],
       proxy: {
         '/api': {
           target: apiUrl,
