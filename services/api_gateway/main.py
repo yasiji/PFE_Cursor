@@ -55,8 +55,10 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # CORS middleware - enforce strict origin validation
 allowed_origins = config.api.allowed_origins or []
+allow_origin_regex = None
+
 if config.environment == "dev":
-    # In development, allow localhost origins
+    # In development, allow localhost and ngrok origins
     if not allowed_origins:
         allowed_origins = [
             "http://localhost:8501",
@@ -70,6 +72,8 @@ if config.environment == "dev":
             "http://127.0.0.1:3001",
             "http://127.0.0.1:5173",
         ]
+    # Allow ngrok URLs for public sharing (dev only)
+    allow_origin_regex = r"https://.*\.ngrok(-free)?\.app"
 else:
     # In production, fail if wildcard or empty origins
     if "*" in allowed_origins or not allowed_origins:
@@ -81,6 +85,7 @@ else:
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
+    allow_origin_regex=allow_origin_regex,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization", "X-Requested-With"],

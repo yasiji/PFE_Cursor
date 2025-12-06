@@ -319,6 +319,12 @@ echo   - ML Dashboard Streamlit (port 8501) - Model analytics
 echo.
 echo Optional Services:
 echo   - Notification Background Job: Run start_notifications.bat
+echo   - Public URL (ngrok):          Run start_ngrok.bat
+echo.
+echo Share with Anyone (ngrok):
+echo   1. Run start_ngrok.bat in a new terminal
+echo   2. Share the https://xxxxx.ngrok.app URL
+echo   3. Others can access your app from anywhere!
 echo.
 echo Testing Tips:
 echo   1. Open http://localhost:3000 in your browser
