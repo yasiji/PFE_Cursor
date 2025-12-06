@@ -1,7 +1,7 @@
 """
-Streamlit Analytics Dashboard for Fresh Product Replenishment Manager.
+Streamlit ML Dashboard for Fresh Product Replenishment Manager.
 
-Main entry point for the Streamlit dashboard application.
+Thesis Presentation Dashboard - LightGBM Forecasting System
 """
 
 import streamlit as st
@@ -21,110 +21,80 @@ config = get_config()
 
 # Page configuration
 st.set_page_config(
-    page_title="Fresh Product Replenishment Manager",
-    page_icon="🛒",
+    page_title="ML Dashboard - Fresh Product Forecasting",
+    page_icon="🤖",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"  # Hide sidebar by default
 )
 
 # Custom CSS for better styling
 st.markdown("""
     <style>
-    .main-header {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #1f77b4;
-        margin-bottom: 1rem;
+    /* Hide the default Streamlit sidebar pages */
+    [data-testid="stSidebarNav"] {
+        display: none !important;
     }
-    .metric-card {
-        background-color: #f0f2f6;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        border-left: 4px solid #1f77b4;
+    
+    /* Hide sidebar completely */
+    section[data-testid="stSidebar"] {
+        display: none !important;
     }
-    /* Fix metric text visibility - make text white on dark/colored background */
-    [data-testid="stMetricValue"] {
-        color: #ffffff !important;
-        font-weight: bold;
+    
+    /* Remove sidebar toggle button */
+    button[kind="header"] {
+        display: none !important;
     }
-    [data-testid="stMetricLabel"] {
-        color: #ffffff !important;
-        font-weight: 500;
+    
+    /* Make main content full width */
+    .main .block-container {
+        max-width: 100%;
+        padding-left: 2rem;
+        padding-right: 2rem;
     }
-    [data-testid="stMetricDelta"] {
-        color: #ffffff !important;
+    
+    /* Fix info boxes - ensure dark text on light backgrounds */
+    .stAlert > div {
+        color: #1f2937 !important;
     }
-    /* Ensure metric containers have dark background with white text */
-    div[data-testid="stMetricContainer"] {
-        background-color: #1f77b4 !important;
-        border: 1px solid #1565a0 !important;
-        border-radius: 0.5rem;
-        padding: 1rem;
+    
+    .stAlert p, .stAlert li, .stAlert strong {
+        color: #1f2937 !important;
     }
-    div[data-testid="stMetricContainer"] > div {
-        color: #ffffff !important;
+    
+    /* Fix for info/success/warning boxes */
+    div[data-testid="stAlert"] {
+        color: #1f2937 !important;
     }
-    div[data-testid="stMetricContainer"] * {
-        color: #ffffff !important;
+    
+    div[data-testid="stAlert"] * {
+        color: #1f2937 !important;
     }
-    /* Fix any text color issues */
-    .stMetric label {
-        color: #ffffff !important;
+    
+    /* Ensure markdown text in colored boxes is visible */
+    .element-container div[data-testid="stMarkdownContainer"] p {
+        color: inherit;
     }
-    .stMetric [data-testid="stMetricValue"] {
-        color: #ffffff !important;
+    
+    /* Fix list items in info boxes */
+    .stAlert ul li {
+        color: #1f2937 !important;
     }
-    /* Ensure all text in metric boxes is white */
-    section[data-testid="stMetric"] {
-        background-color: #1f77b4 !important;
+    
+    /* Custom styled boxes - ensure text is dark */
+    div[style*="background"] {
+        color: #1f2937 !important;
     }
-    section[data-testid="stMetric"] * {
-        color: #ffffff !important;
-    }
-    /* Additional fix for metric value display */
-    .stMetric > div > div {
-        color: #ffffff !important;
+    
+    div[style*="background"] p,
+    div[style*="background"] li,
+    div[style*="background"] strong,
+    div[style*="background"] h4,
+    div[style*="background"] ul {
+        color: #1f2937 !important;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Sidebar navigation
-st.sidebar.title("🛒 Fresh Product Replenishment Manager")
-st.sidebar.markdown("---")
-
-# Navigation
-page = st.sidebar.radio(
-    "Navigate",
-    ["📊 Global Overview", "🏪 Store View", "📦 SKU Detail", "🧪 Simulation", "🤖 ML Dashboard"],
-    index=0
-)
-
-# Sidebar info
-st.sidebar.markdown("---")
-st.sidebar.markdown("### Project Status")
-st.sidebar.success("✅ Phase 4 Complete")
-st.sidebar.info("🔄 Phase 5: Dashboard Development")
-
-st.sidebar.markdown("---")
-st.sidebar.markdown("### Quick Info")
-st.sidebar.markdown(f"**Model:** LightGBM")
-st.sidebar.markdown(f"**Service Level:** {config.models.forecasting.default_service_level*100:.0f}%")
-st.sidebar.markdown(f"**Coverage Days:** {config.models.replenishment.target_coverage_days}")
-
-# Main content area
-if page == "📊 Global Overview":
-    from apps.streamlit.pages import global_overview
-    global_overview.render()
-elif page == "🏪 Store View":
-    from apps.streamlit.pages import store_view
-    store_view.render()
-elif page == "📦 SKU Detail":
-    from apps.streamlit.pages import sku_detail
-    sku_detail.render()
-elif page == "🧪 Simulation":
-    from apps.streamlit.pages import simulation
-    simulation.render()
-elif page == "🤖 ML Dashboard":
-    from apps.streamlit.pages import ml_dashboard
-    ml_dashboard.render()
-
+# Load and render ML Dashboard directly
+from apps.streamlit.pages import ml_dashboard
+ml_dashboard.render()

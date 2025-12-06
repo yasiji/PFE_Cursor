@@ -78,6 +78,34 @@ def load_training_info():
 def render():
     """Render the ML Dashboard page."""
     
+    # Global CSS to fix text visibility in styled boxes
+    st.markdown("""
+    <style>
+    /* Force dark text in all light-background styled divs */
+    div[style*="background: #f"] *,
+    div[style*="background: #e"] *,
+    div[style*="background: #fff"] *,
+    div[style*="background: linear-gradient(135deg, #f"] *,
+    div[style*="background: linear-gradient(135deg, #667eea22"] * {
+        color: #1f2937 !important;
+    }
+    
+    /* Keep white text for dark gradient headers */
+    div[style*="background: linear-gradient(135deg, #667eea 0%, #764ba2"] *,
+    div[style*="background: linear-gradient(135deg, #667eea 0%, #764ba2"] h1,
+    div[style*="background: linear-gradient(135deg, #667eea 0%, #764ba2"] p {
+        color: white !important;
+    }
+    
+    /* Ensure list items are dark on light backgrounds */
+    div[style*="background: #f"] li,
+    div[style*="background: #e"] li,
+    div[style*="background: #fff"] li {
+        color: #1f2937 !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     # Header with gradient
     st.markdown("""
     <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
@@ -205,13 +233,13 @@ def render_model_overview(model_results, training_info):
         st.plotly_chart(fig, use_container_width=True)
         
         st.markdown("""
-        <div style="background: #f8f9fa; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #667eea;">
-            <strong>🎯 Goal:</strong> Predict daily demand for fresh/perishable products to:
-            <ul>
-                <li>📦 Optimize inventory levels</li>
-                <li>🗑️ Reduce waste from expired products</li>
-                <li>📈 Prevent lost sales from stockouts</li>
-                <li>💰 Maximize profitability</li>
+        <div style="background: #f8f9fa; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #667eea; color: #1f2937;">
+            <strong style="color: #1f2937;">🎯 Goal:</strong> <span style="color: #1f2937;">Predict daily demand for fresh/perishable products to:</span>
+            <ul style="color: #1f2937;">
+                <li style="color: #1f2937;">📦 Optimize inventory levels</li>
+                <li style="color: #1f2937;">🗑️ Reduce waste from expired products</li>
+                <li style="color: #1f2937;">📈 Prevent lost sales from stockouts</li>
+                <li style="color: #1f2937;">💰 Maximize profitability</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
