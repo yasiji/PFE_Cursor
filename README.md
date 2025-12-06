@@ -2,36 +2,6 @@
 
 An end-to-end decision support system for predicting daily order quantities for fresh products at store level, minimizing waste and stockouts while protecting profitability.
 
----
-
-## 🐳 Quick Start with Docker
-
-**Run with a single command:**
-
-```bash
-# Clone and run
-git clone https://github.com/YOUR_USERNAME/PFE_Cursor.git
-cd PFE_Cursor
-docker-compose up -d
-```
-
-**Or pull pre-built image:**
-
-```bash
-docker run -d -p 80:80 -p 8000:8000 -p 8501:8501 --name pfe-app ghcr.io/YOUR_USERNAME/pfe-replenishment:latest
-```
-
-**Access the app:**
-| Service | URL |
-|---------|-----|
-| 🖥️ Frontend | http://localhost |
-| 📚 API Docs | http://localhost:8000/docs |
-| 📊 ML Dashboard | http://localhost:8501 |
-
-**Login:** `test_user` / `test123`
-
----
-
 ## 🎯 Overview
 
 This system provides:

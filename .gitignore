@@ -59,8 +59,8 @@ data/raw/*.parquet
 data/raw/*.csv
 FreshRetailNet-50K/
 
-# Model files (optional - remove if you want to include)
-# data/models/*.pkl
+# Model files - INCLUDED for full ML functionality
+# data/models/*.pkl  # Commented out - we want to include models
 
 # Temporary
 *.tmp
