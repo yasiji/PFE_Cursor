@@ -984,15 +984,17 @@ def render_performance(model_results, baseline_results):
     ), row=1, col=4)
     
     fig.update_layout(
-        height=300,
+        height=350,
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
-        font={'color': '#e2e8f0'}
+        font={'color': '#e2e8f0'},
+        margin=dict(t=80, b=20, l=20, r=20)
     )
     
-    # Update subplot titles to be white
+    # Update subplot titles to be white and positioned higher
     for annotation in fig['layout']['annotations']:
         annotation['font'] = {'color': '#e2e8f0', 'size': 14}
+        annotation['y'] = 1.15  # Move titles higher above gauges
     
     st.plotly_chart(fig, use_container_width=True)
     
@@ -1424,13 +1426,13 @@ def render_demand_factors():
     
     with col1:
         st.markdown("""
-        <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        <div style="background: linear-gradient(135deg, #1e3a5f 0%, #1e293b 100%);
                     padding: 1.5rem; border-radius: 0.75rem; text-align: center; 
                     height: 220px; border-left: 4px solid #667eea;">
-            <h3 style="color: #f1f5f9; margin: 0 0 0.5rem 0;">📅 Calendar</h3>
-            <p style="color: #94a3b8; margin: 0.25rem 0;"><strong style="color: #f1f5f9;">Source:</strong> Python datetime</p>
-            <hr style="border-color: #475569; margin: 0.75rem 0;">
-            <p style="color: #e2e8f0; margin: 0; line-height: 1.6; font-size: 0.9rem;">
+            <h3 style="color: #ffffff; margin: 0 0 0.5rem 0; font-size: 1.3rem;">📅 Calendar</h3>
+            <p style="color: #ffffff; margin: 0.25rem 0;"><strong>Source:</strong> Python datetime</p>
+            <hr style="border-color: #667eea; margin: 0.75rem 0;">
+            <p style="color: #ffffff; margin: 0; line-height: 1.8; font-size: 0.95rem;">
                 • Day of week<br>• Month/Quarter<br>• Weekend flag<br>• Pay day proximity
             </p>
         </div>
@@ -1438,13 +1440,13 @@ def render_demand_factors():
     
     with col2:
         st.markdown("""
-        <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        <div style="background: linear-gradient(135deg, #451a03 0%, #1e293b 100%);
                     padding: 1.5rem; border-radius: 0.75rem; text-align: center; 
                     height: 220px; border-left: 4px solid #f59e0b;">
-            <h3 style="color: #f1f5f9; margin: 0 0 0.5rem 0;">🌤️ Weather</h3>
-            <p style="color: #94a3b8; margin: 0.25rem 0;"><strong style="color: #f1f5f9;">Source:</strong> Open-Meteo API</p>
-            <hr style="border-color: #475569; margin: 0.75rem 0;">
-            <p style="color: #e2e8f0; margin: 0; line-height: 1.6; font-size: 0.9rem;">
+            <h3 style="color: #ffffff; margin: 0 0 0.5rem 0; font-size: 1.3rem;">🌤️ Weather</h3>
+            <p style="color: #ffffff; margin: 0.25rem 0;"><strong>Source:</strong> Open-Meteo API</p>
+            <hr style="border-color: #f59e0b; margin: 0.75rem 0;">
+            <p style="color: #ffffff; margin: 0; line-height: 1.8; font-size: 0.95rem;">
                 • Temperature<br>• Precipitation<br>• Weather code<br>• UV Index
             </p>
         </div>
@@ -1452,13 +1454,13 @@ def render_demand_factors():
     
     with col3:
         st.markdown("""
-        <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        <div style="background: linear-gradient(135deg, #3b1a5f 0%, #1e293b 100%);
                     padding: 1.5rem; border-radius: 0.75rem; text-align: center; 
                     height: 220px; border-left: 4px solid #a855f7;">
-            <h3 style="color: #f1f5f9; margin: 0 0 0.5rem 0;">🎉 Holidays</h3>
-            <p style="color: #94a3b8; margin: 0.25rem 0;"><strong style="color: #f1f5f9;">Source:</strong> Nager.Date API</p>
-            <hr style="border-color: #475569; margin: 0.75rem 0;">
-            <p style="color: #e2e8f0; margin: 0; line-height: 1.6; font-size: 0.9rem;">
+            <h3 style="color: #ffffff; margin: 0 0 0.5rem 0; font-size: 1.3rem;">🎉 Holidays</h3>
+            <p style="color: #ffffff; margin: 0.25rem 0;"><strong>Source:</strong> Nager.Date API</p>
+            <hr style="border-color: #a855f7; margin: 0.75rem 0;">
+            <p style="color: #ffffff; margin: 0; line-height: 1.8; font-size: 0.95rem;">
                 • Public holidays<br>• Pre/post holiday<br>• Special events<br>• School breaks
             </p>
         </div>
