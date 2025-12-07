@@ -78,30 +78,96 @@ def load_training_info():
 def render():
     """Render the ML Dashboard page."""
     
-    # Global CSS to fix text visibility in styled boxes
+    # Global CSS for consistent dark theme styling
     st.markdown("""
     <style>
-    /* Force dark text in all light-background styled divs */
-    div[style*="background: #f"] *,
-    div[style*="background: #e"] *,
-    div[style*="background: #fff"] *,
-    div[style*="background: linear-gradient(135deg, #f"] *,
-    div[style*="background: linear-gradient(135deg, #667eea22"] * {
-        color: #1f2937 !important;
+    /* ===== UNIFIED DARK THEME FOR ALL BOXES ===== */
+    
+    /* Primary boxes - Dark blue/purple gradient */
+    .info-box {
+        background: linear-gradient(135deg, #1e3a5f 0%, #2d1b4e 100%) !important;
+        color: #ffffff !important;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        border-left: 4px solid #667eea;
+        margin-bottom: 1rem;
     }
     
-    /* Keep white text for dark gradient headers */
-    div[style*="background: linear-gradient(135deg, #667eea 0%, #764ba2"] *,
-    div[style*="background: linear-gradient(135deg, #667eea 0%, #764ba2"] h1,
-    div[style*="background: linear-gradient(135deg, #667eea 0%, #764ba2"] p {
-        color: white !important;
+    .info-box *, .info-box p, .info-box li, .info-box strong, .info-box h4, .info-box ul, .info-box ol {
+        color: #ffffff !important;
     }
     
-    /* Ensure list items are dark on light backgrounds */
-    div[style*="background: #f"] li,
-    div[style*="background: #e"] li,
-    div[style*="background: #fff"] li {
-        color: #1f2937 !important;
+    /* Secondary boxes - Slightly lighter dark */
+    .secondary-box {
+        background: linear-gradient(135deg, #2a3f5f 0%, #1a2744 100%) !important;
+        color: #e0e7ff !important;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        margin-bottom: 1rem;
+    }
+    
+    .secondary-box *, .secondary-box p, .secondary-box li, .secondary-box strong {
+        color: #e0e7ff !important;
+    }
+    
+    /* Success/positive boxes - Dark green */
+    .success-box {
+        background: linear-gradient(135deg, #1a4731 0%, #14532d 100%) !important;
+        color: #bbf7d0 !important;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        border-left: 4px solid #22c55e;
+        margin-bottom: 1rem;
+    }
+    
+    .success-box *, .success-box p, .success-box li, .success-box strong, .success-box ol {
+        color: #bbf7d0 !important;
+    }
+    
+    /* Warning boxes - Dark orange/amber */
+    .warning-box {
+        background: linear-gradient(135deg, #451a03 0%, #78350f 100%) !important;
+        color: #fef3c7 !important;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        border-left: 4px solid #f59e0b;
+        margin-bottom: 1rem;
+    }
+    
+    .warning-box *, .warning-box p, .warning-box li, .warning-box strong {
+        color: #fef3c7 !important;
+    }
+    
+    /* Accent boxes - Dark purple */
+    .accent-box {
+        background: linear-gradient(135deg, #3b1a5f 0%, #581c87 100%) !important;
+        color: #e9d5ff !important;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        border-left: 4px solid #a855f7;
+        margin-bottom: 1rem;
+    }
+    
+    .accent-box *, .accent-box p, .accent-box li, .accent-box strong {
+        color: #e9d5ff !important;
+    }
+    
+    /* Card boxes - For metric-like displays */
+    .card-box {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+        color: #f1f5f9 !important;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+    
+    .card-box *, .card-box p, .card-box h3, .card-box hr {
+        color: #f1f5f9 !important;
+    }
+    
+    .card-box hr {
+        border-color: #475569 !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -233,13 +299,13 @@ def render_model_overview(model_results, training_info):
         st.plotly_chart(fig, use_container_width=True)
         
         st.markdown("""
-        <div style="background: #f8f9fa; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #667eea; color: #1f2937;">
-            <strong style="color: #1f2937;">🎯 Goal:</strong> <span style="color: #1f2937;">Predict daily demand for fresh/perishable products to:</span>
-            <ul style="color: #1f2937;">
-                <li style="color: #1f2937;">📦 Optimize inventory levels</li>
-                <li style="color: #1f2937;">🗑️ Reduce waste from expired products</li>
-                <li style="color: #1f2937;">📈 Prevent lost sales from stockouts</li>
-                <li style="color: #1f2937;">💰 Maximize profitability</li>
+        <div class="info-box">
+            <strong>🎯 Goal:</strong> Predict daily demand for fresh/perishable products to:
+            <ul>
+                <li>📦 Optimize inventory levels</li>
+                <li>🗑️ Reduce waste from expired products</li>
+                <li>📈 Prevent lost sales from stockouts</li>
+                <li>💰 Maximize profitability</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
@@ -317,8 +383,7 @@ def render_how_it_works():
     st.header("🧠 How LightGBM Works")
     
     st.markdown("""
-    <div style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); 
-                padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1rem;">
+    <div class="info-box">
         <h4>🌳 Gradient Boosting Decision Trees (GBDT)</h4>
         <p>LightGBM is an advanced implementation of GBDT that uses <strong>histogram-based</strong> 
         and <strong>leaf-wise</strong> growth strategies for faster training.</p>
@@ -379,10 +444,12 @@ def render_how_it_works():
         )
         st.plotly_chart(fig, use_container_width=True)
         
-        st.info("""
-        **Key Insight:** Each tree corrects the errors of previous trees. 
-        Early stopping prevents overfitting when validation error stops improving.
-        """)
+        st.markdown("""
+        <div class="info-box">
+            <strong>Key Insight:</strong> Each tree corrects the errors of previous trees. 
+            Early stopping prevents overfitting when validation error stops improving.
+        </div>
+        """, unsafe_allow_html=True)
     
     with col2:
         st.subheader("🌿 Leaf-wise vs Level-wise")
@@ -419,12 +486,16 @@ def render_how_it_works():
         fig.update_yaxes(showticklabels=False, showgrid=False)
         st.plotly_chart(fig, use_container_width=True)
         
-        st.success("""
-        **Why Leaf-wise is Better:**
-        - 🚀 Faster convergence
-        - 📉 Lower loss with same #leaves
-        - ⚠️ Needs regularization to prevent overfitting
-        """)
+        st.markdown("""
+        <div class="success-box">
+            <strong>Why Leaf-wise is Better:</strong>
+            <ul>
+                <li>🚀 Faster convergence</li>
+                <li>📉 Lower loss with same #leaves</li>
+                <li>⚠️ Needs regularization to prevent overfitting</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Gradient calculation visualization
     st.subheader("📐 Gradient Descent Visualization")
@@ -462,7 +533,7 @@ def render_how_it_works():
     st.plotly_chart(fig, use_container_width=True)
     
     st.markdown("""
-    <div style="background: #e8f5e9; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #4caf50;">
+    <div class="success-box">
         <strong>🎯 How Gradient Descent Works:</strong>
         <ol>
             <li>Start at random point (high error)</li>
@@ -525,7 +596,7 @@ def render_architecture():
         st.plotly_chart(fig, use_container_width=True)
         
         st.markdown("""
-        <div style="background: #fff3e0; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #ff9800;">
+        <div class="warning-box">
             <strong>How Ensemble Works:</strong>
             <ol>
                 <li><strong>Tree 1:</strong> Makes initial prediction</li>
@@ -625,7 +696,7 @@ def render_features(feature_importance):
         
         # Feature creation process
         st.markdown("""
-        <div style="background: #e3f2fd; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem;">
+        <div class="info-box">
             <h4>🛠️ Feature Engineering Process</h4>
             <ol>
                 <li><strong>Calendar:</strong> Extract day, week, month, quarter</li>
@@ -1272,9 +1343,7 @@ def render_demand_factors():
     st.header("🌡️ Demand Factors & Seasonality")
     
     st.markdown("""
-    <div style="background: linear-gradient(135deg, #667eea22 0%, #764ba222 100%); 
-                padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1rem;
-                border: 1px solid #667eea44;">
+    <div class="accent-box">
         <h4>🔌 Real-Time External API Integration</h4>
         <p>Our system integrates with external APIs to adjust predictions based on real-world conditions.</p>
     </div>
@@ -1285,7 +1354,7 @@ def render_demand_factors():
     
     with col1:
         st.markdown("""
-        <div style="background: #e3f2fd; padding: 1.5rem; border-radius: 0.5rem; text-align: center; height: 200px;">
+        <div class="card-box" style="height: 200px;">
             <h3>📅 Calendar</h3>
             <p><strong>Source:</strong> Python datetime</p>
             <hr>
@@ -1295,7 +1364,7 @@ def render_demand_factors():
     
     with col2:
         st.markdown("""
-        <div style="background: #fff8e1; padding: 1.5rem; border-radius: 0.5rem; text-align: center; height: 200px;">
+        <div class="card-box" style="height: 200px; border-left: 4px solid #f59e0b;">
             <h3>🌤️ Weather</h3>
             <p><strong>Source:</strong> Open-Meteo API</p>
             <hr>
@@ -1305,7 +1374,7 @@ def render_demand_factors():
     
     with col3:
         st.markdown("""
-        <div style="background: #f3e5f5; padding: 1.5rem; border-radius: 0.5rem; text-align: center; height: 200px;">
+        <div class="card-box" style="height: 200px; border-left: 4px solid #a855f7;">
             <h3>🎉 Holidays</h3>
             <p><strong>Source:</strong> Nager.Date API</p>
             <hr>
@@ -1556,12 +1625,16 @@ def render_deep_analysis(predictions, feature_importance, model_results):
     )
     st.plotly_chart(fig, use_container_width=True)
     
-    st.info("""
-    **Key Observations:**
-    - Gap between training and validation decreases with more data (less overfitting)
-    - Both curves converge, indicating good generalization
-    - Model benefits from having more training data
-    """)
+    st.markdown("""
+    <div class="info-box">
+        <strong>Key Observations:</strong>
+        <ul>
+            <li>Gap between training and validation decreases with more data (less overfitting)</li>
+            <li>Both curves converge, indicating good generalization</li>
+            <li>Model benefits from having more training data</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Feature interaction heatmap
     st.subheader("🔥 Feature Interactions")
