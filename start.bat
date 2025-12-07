@@ -208,21 +208,77 @@ echo [OK] Backend server starting on http://localhost:8000
 echo.
 
 REM ========================================
-REM Step 8: Start Frontend Server
+REM Step 8: Start ngrok tunnels (auto-publish, optional)
 REM ========================================
-echo [8/10] Starting frontend server...
-start "Frontend Development Server" cmd /k "cd /d %~dp0\apps\store-manager-frontend && npm run dev"
+echo [8/10] Starting ngrok tunnels for public sharing (backend:8000, frontend:3000)...
+where ngrok >nul 2>&1
+if errorlevel 1 (
+    echo [INFO] ngrok not found in PATH. Skipping public URLs. Install from https://ngrok.com/download and add to PATH to enable auto-sharing.
+    set NGROK_BACKEND_URL=
+    set NGROK_FRONTEND_URL=
+) else (
+    REM Launch ngrok tunnels in separate windows
+    start "ngrok-backend-8000" cmd /k "cd /d %~dp0 && ngrok http 8000"
+    start "ngrok-frontend-3000" cmd /k "cd /d %~dp0 && ngrok http 3000"
 
-REM Wait for frontend to start
-timeout /t 5 /nobreak >nul
-echo [OK] Frontend server starting on http://localhost:3000
+    REM Give ngrok a moment to start and expose the API
+    timeout /t 5 /nobreak >nul
+
+    REM Fetch public URLs from the local ngrok API and save to file
+    python -c "import json, urllib.request, time; time.sleep(1); backend='N/A'; frontend='N/A'; data=json.load(urllib.request.urlopen('http://127.0.0.1:4040/api/tunnels')); \
+from pathlib import Path; f=Path('ngrok_urls.txt'); \
+for t in data.get('tunnels', []): \
+    addr=t.get('config', {}).get('addr',''); pub=t.get('public_url',''); \
+    if pub.startswith('https://') and '8000' in addr and backend=='N/A': backend=pub; \
+    if pub.startswith('https://') and '3000' in addr and frontend=='N/A': frontend=pub; \
+f.write_text(f'NGROK_BACKEND_URL={backend}\\nNGROK_FRONTEND_URL={frontend}\\n', encoding='utf-8')"
+
+    REM Load URLs into environment variables
+    for /f "tokens=1,2 delims==" %%A in (ngrok_urls.txt) do set %%A=%%B
+
+    if "%NGROK_BACKEND_URL%"=="" set NGROK_BACKEND_URL=N/A
+    if "%NGROK_FRONTEND_URL%"=="" set NGROK_FRONTEND_URL=N/A
+
+    if /I "%NGROK_BACKEND_URL%"=="N/A" (
+        echo [WARN] Could not detect ngrok backend URL (port 8000). Check ngrok window.
+    ) else (
+        echo [OK] Backend public URL: %NGROK_BACKEND_URL%
+    )
+
+    if /I "%NGROK_FRONTEND_URL%"=="N/A" (
+        echo [WARN] Could not detect ngrok frontend URL (port 3000). Check ngrok window.
+    ) else (
+        echo [OK] Frontend public URL: %NGROK_FRONTEND_URL%
+    )
+)
 
 echo.
 
 REM ========================================
-REM Step 8.5: Start ML Dashboard (Streamlit)
+REM Step 9: Start Frontend Server (uses ngrok backend URL if available)
 REM ========================================
-echo [8.5/10] Starting ML Dashboard (Streamlit)...
+echo [9/10] Starting frontend server...
+if defined NGROK_BACKEND_URL if /I not "%NGROK_BACKEND_URL%"=="N/A" (
+    echo [INFO] Using ngrok backend for frontend API: %NGROK_BACKEND_URL%
+    start "Frontend Development Server" cmd /k "cd /d %~dp0\apps\store-manager-frontend && set VITE_API_URL=%NGROK_BACKEND_URL% && npm run dev"
+) else (
+    echo [INFO] Using local backend for frontend API: http://localhost:8000
+    start "Frontend Development Server" cmd /k "cd /d %~dp0\apps\store-manager-frontend && set VITE_API_URL=http://localhost:8000 && npm run dev"
+)
+
+REM Wait for frontend to start
+timeout /t 5 /nobreak >nul
+echo [OK] Frontend server starting on http://localhost:3000
+if defined NGROK_FRONTEND_URL if /I not "%NGROK_FRONTEND_URL%"=="N/A" (
+    echo [OK] Public frontend URL (share this): %NGROK_FRONTEND_URL%
+)
+
+echo.
+
+REM ========================================
+REM Step 9.5: Start ML Dashboard (Streamlit)
+REM ========================================
+echo [9.5/10] Starting ML Dashboard (Streamlit)...
 start "ML Dashboard - Streamlit" cmd /k "cd /d %~dp0 && streamlit run apps/streamlit/app.py --server.port 8501 --server.headless true"
 
 REM Wait for Streamlit to start
@@ -232,9 +288,9 @@ echo [OK] ML Dashboard starting on http://localhost:8501
 echo.
 
 REM ========================================
-REM Step 9: Check Ports and Wait for Backend
+REM Check Ports and Wait for Backend
 REM ========================================
-echo [9/10] Checking ports and waiting for backend...
+echo [INFO] Checking ports and waiting for backend...
 netstat -an | findstr ":8000" >nul
 if not errorlevel 1 (
     echo [WARNING] Port 8000 is already in use! Backend may already be running.
@@ -271,9 +327,9 @@ if not errorlevel 1 (
 echo.
 
 REM ========================================
-REM Step 10: Open Browser and Show Summary
+REM Open Browser and Show Summary
 REM ========================================
-echo [10/10] Opening browser...
+echo [INFO] Opening browser...
 timeout /t 3 /nobreak >nul
 start http://localhost:3000
 
