@@ -156,10 +156,11 @@ def render():
     .card-box {
         background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
         color: #f1f5f9 !important;
-        padding: 1.5rem;
+        padding: 1.5rem 2rem;
         border-radius: 0.75rem;
         text-align: center;
         margin-bottom: 1rem;
+        overflow: hidden;
     }
     
     .card-box *, .card-box p, .card-box h3, .card-box hr {
@@ -168,6 +169,48 @@ def render():
     
     .card-box hr {
         border-color: #475569 !important;
+        margin: 0.75rem 0;
+    }
+    
+    /* Fix bullet points inside cards */
+    .card-box p {
+        text-align: center;
+        margin: 0;
+        padding: 0.25rem 0;
+    }
+    
+    /* KPI metric cards - better spacing */
+    .kpi-card {
+        background: linear-gradient(135deg, var(--card-color, #667eea)33 0%, var(--card-color, #667eea)11 100%);
+        padding: 1.25rem 1rem;
+        border-radius: 0.75rem;
+        text-align: center;
+        border: 2px solid var(--card-color, #667eea);
+        min-height: 120px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .kpi-card .kpi-label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .kpi-card .kpi-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin: 0.25rem 0;
+        color: #ffffff !important;
+    }
+    
+    .kpi-card .kpi-unit {
+        font-size: 0.75rem;
+        color: #94a3b8;
+        margin-top: 0.25rem;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -266,12 +309,19 @@ def render_model_overview(model_results, training_info):
         for col, (name, value, unit, color) in zip(cols, metrics):
             with col:
                 st.markdown(f"""
-                <div style="background: linear-gradient(135deg, {color}22 0%, {color}11 100%);
-                            padding: 1rem; border-radius: 0.5rem; text-align: center;
-                            border: 2px solid {color};">
-                    <h4 style="margin: 0; color: {color};">{name}</h4>
-                    <h2 style="margin: 0.5rem 0;">{value:.4f}</h2>
-                    <small style="color: #666;">{unit}</small>
+                <div style="background: linear-gradient(135deg, {color}33 0%, {color}11 100%);
+                            padding: 1.5rem 1rem; border-radius: 0.75rem; text-align: center;
+                            border: 2px solid {color}; min-height: 130px;">
+                    <div style="font-size: 0.85rem; font-weight: 600; color: {color}; 
+                                text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;">
+                        {name}
+                    </div>
+                    <div style="font-size: 2rem; font-weight: 700; color: #ffffff; margin: 0.5rem 0;">
+                        {value:.4f}
+                    </div>
+                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.5rem;">
+                        {unit}
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
     
@@ -859,18 +909,20 @@ def render_performance(model_results, baseline_results):
     fig.add_trace(go.Indicator(
         mode="gauge+number+delta",
         value=model_results['mae'],
-        delta={'reference': 0.5, 'decreasing': {'color': 'green'}},
+        number={'font': {'color': '#ffffff', 'size': 28}},
+        delta={'reference': 0.5, 'decreasing': {'color': '#4ade80'}, 'font': {'color': '#4ade80'}},
         gauge={
-            'axis': {'range': [0, 1]},
+            'axis': {'range': [0, 1], 'tickfont': {'color': '#e2e8f0'}},
             'bar': {'color': "#667eea"},
-            'bgcolor': "white",
+            'bgcolor': "#334155",
+            'bordercolor': "#475569",
             'steps': [
-                {'range': [0, 0.3], 'color': '#e8f5e9'},
-                {'range': [0.3, 0.6], 'color': '#fff3e0'},
-                {'range': [0.6, 1], 'color': '#ffebee'}
+                {'range': [0, 0.3], 'color': '#166534'},
+                {'range': [0.3, 0.6], 'color': '#854d0e'},
+                {'range': [0.6, 1], 'color': '#991b1b'}
             ],
             'threshold': {
-                'line': {'color': "red", 'width': 4},
+                'line': {'color': "#ef4444", 'width': 4},
                 'thickness': 0.75,
                 'value': 0.5
             }
@@ -881,13 +933,16 @@ def render_performance(model_results, baseline_results):
     fig.add_trace(go.Indicator(
         mode="gauge+number",
         value=model_results['rmse'],
+        number={'font': {'color': '#ffffff', 'size': 28}},
         gauge={
-            'axis': {'range': [0, 1.5]},
+            'axis': {'range': [0, 1.5], 'tickfont': {'color': '#e2e8f0'}},
             'bar': {'color': "#764ba2"},
+            'bgcolor': "#334155",
+            'bordercolor': "#475569",
             'steps': [
-                {'range': [0, 0.5], 'color': '#e8f5e9'},
-                {'range': [0.5, 1], 'color': '#fff3e0'},
-                {'range': [1, 1.5], 'color': '#ffebee'}
+                {'range': [0, 0.5], 'color': '#166534'},
+                {'range': [0.5, 1], 'color': '#854d0e'},
+                {'range': [1, 1.5], 'color': '#991b1b'}
             ]
         }
     ), row=1, col=2)
@@ -896,14 +951,16 @@ def render_performance(model_results, baseline_results):
     fig.add_trace(go.Indicator(
         mode="gauge+number",
         value=model_results['wape'],
-        number={'suffix': '%'},
+        number={'suffix': '%', 'font': {'color': '#ffffff', 'size': 28}},
         gauge={
-            'axis': {'range': [0, 50]},
+            'axis': {'range': [0, 50], 'tickfont': {'color': '#e2e8f0'}},
             'bar': {'color': "#4caf50"},
+            'bgcolor': "#334155",
+            'bordercolor': "#475569",
             'steps': [
-                {'range': [0, 15], 'color': '#e8f5e9'},
-                {'range': [15, 30], 'color': '#fff3e0'},
-                {'range': [30, 50], 'color': '#ffebee'}
+                {'range': [0, 15], 'color': '#166534'},
+                {'range': [15, 30], 'color': '#854d0e'},
+                {'range': [30, 50], 'color': '#991b1b'}
             ]
         }
     ), row=1, col=3)
@@ -912,18 +969,31 @@ def render_performance(model_results, baseline_results):
     fig.add_trace(go.Indicator(
         mode="gauge+number",
         value=model_results['bias'],
+        number={'font': {'color': '#ffffff', 'size': 28}},
         gauge={
-            'axis': {'range': [-1, 1]},
+            'axis': {'range': [-1, 1], 'tickfont': {'color': '#e2e8f0'}},
             'bar': {'color': "#ff9800"},
+            'bgcolor': "#334155",
+            'bordercolor': "#475569",
             'steps': [
-                {'range': [-1, -0.2], 'color': '#e3f2fd'},
-                {'range': [-0.2, 0.2], 'color': '#e8f5e9'},
-                {'range': [0.2, 1], 'color': '#fff3e0'}
+                {'range': [-1, -0.2], 'color': '#1e40af'},
+                {'range': [-0.2, 0.2], 'color': '#166534'},
+                {'range': [0.2, 1], 'color': '#854d0e'}
             ]
         }
     ), row=1, col=4)
     
-    fig.update_layout(height=300)
+    fig.update_layout(
+        height=300,
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        font={'color': '#e2e8f0'}
+    )
+    
+    # Update subplot titles to be white
+    for annotation in fig['layout']['annotations']:
+        annotation['font'] = {'color': '#e2e8f0', 'size': 14}
+    
     st.plotly_chart(fig, use_container_width=True)
     
     col1, col2 = st.columns([1, 1])
@@ -1354,31 +1424,43 @@ def render_demand_factors():
     
     with col1:
         st.markdown("""
-        <div class="card-box" style="height: 200px;">
-            <h3>📅 Calendar</h3>
-            <p><strong>Source:</strong> Python datetime</p>
-            <hr>
-            <p>• Day of week<br>• Month/Quarter<br>• Weekend flag<br>• Pay day proximity</p>
+        <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+                    padding: 1.5rem; border-radius: 0.75rem; text-align: center; 
+                    height: 220px; border-left: 4px solid #667eea;">
+            <h3 style="color: #f1f5f9; margin: 0 0 0.5rem 0;">📅 Calendar</h3>
+            <p style="color: #94a3b8; margin: 0.25rem 0;"><strong style="color: #f1f5f9;">Source:</strong> Python datetime</p>
+            <hr style="border-color: #475569; margin: 0.75rem 0;">
+            <p style="color: #e2e8f0; margin: 0; line-height: 1.6; font-size: 0.9rem;">
+                • Day of week<br>• Month/Quarter<br>• Weekend flag<br>• Pay day proximity
+            </p>
         </div>
         """, unsafe_allow_html=True)
     
     with col2:
         st.markdown("""
-        <div class="card-box" style="height: 200px; border-left: 4px solid #f59e0b;">
-            <h3>🌤️ Weather</h3>
-            <p><strong>Source:</strong> Open-Meteo API</p>
-            <hr>
-            <p>• Temperature<br>• Precipitation<br>• Weather code<br>• UV Index</p>
+        <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+                    padding: 1.5rem; border-radius: 0.75rem; text-align: center; 
+                    height: 220px; border-left: 4px solid #f59e0b;">
+            <h3 style="color: #f1f5f9; margin: 0 0 0.5rem 0;">🌤️ Weather</h3>
+            <p style="color: #94a3b8; margin: 0.25rem 0;"><strong style="color: #f1f5f9;">Source:</strong> Open-Meteo API</p>
+            <hr style="border-color: #475569; margin: 0.75rem 0;">
+            <p style="color: #e2e8f0; margin: 0; line-height: 1.6; font-size: 0.9rem;">
+                • Temperature<br>• Precipitation<br>• Weather code<br>• UV Index
+            </p>
         </div>
         """, unsafe_allow_html=True)
     
     with col3:
         st.markdown("""
-        <div class="card-box" style="height: 200px; border-left: 4px solid #a855f7;">
-            <h3>🎉 Holidays</h3>
-            <p><strong>Source:</strong> Nager.Date API</p>
-            <hr>
-            <p>• Public holidays<br>• Pre/post holiday<br>• Special events<br>• School breaks</p>
+        <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+                    padding: 1.5rem; border-radius: 0.75rem; text-align: center; 
+                    height: 220px; border-left: 4px solid #a855f7;">
+            <h3 style="color: #f1f5f9; margin: 0 0 0.5rem 0;">🎉 Holidays</h3>
+            <p style="color: #94a3b8; margin: 0.25rem 0;"><strong style="color: #f1f5f9;">Source:</strong> Nager.Date API</p>
+            <hr style="border-color: #475569; margin: 0.75rem 0;">
+            <p style="color: #e2e8f0; margin: 0; line-height: 1.6; font-size: 0.9rem;">
+                • Public holidays<br>• Pre/post holiday<br>• Special events<br>• School breaks
+            </p>
         </div>
         """, unsafe_allow_html=True)
     
