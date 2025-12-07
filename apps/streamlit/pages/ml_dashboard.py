@@ -212,6 +212,17 @@ def render():
         color: #94a3b8;
         margin-top: 0.25rem;
     }
+    
+    /* FORCE WHITE TEXT IN API CARDS */
+    .api-card {
+        color: white !important;
+    }
+    .api-card * {
+        color: white !important;
+    }
+    .api-card h3, .api-card p, .api-card div, .api-card b, .api-card strong {
+        color: white !important;
+    }
     </style>
     """, unsafe_allow_html=True)
     
@@ -1426,51 +1437,51 @@ def render_demand_factors():
     
     with col1:
         st.markdown("""
-        <div style="background: linear-gradient(135deg, #1e3a5f 0%, #1e293b 100%);
+        <div class="api-card" style="background: linear-gradient(135deg, #1e3a5f 0%, #1e293b 100%);
                     padding: 1.5rem; border-radius: 0.75rem; text-align: center; 
                     min-height: 220px; border-left: 4px solid #667eea; border: 2px solid #334155;">
-            <h3 style="color: white !important; margin: 0 0 0.5rem 0; font-size: 1.3rem;">📅 Calendar</h3>
-            <p style="color: white !important; margin: 0.25rem 0;"><b style="color: white !important;">Source:</b> Python datetime</p>
+            <h3 style="margin: 0 0 0.5rem 0; font-size: 1.3rem;">📅 Calendar</h3>
+            <p style="margin: 0.25rem 0;"><b>Source:</b> Python datetime</p>
             <hr style="border: 1px solid #667eea; margin: 0.75rem 0;">
-            <div style="color: white !important; text-align: center; font-size: 0.95rem;">
-                <div style="color: white !important; padding: 2px 0;">✦ Day of week</div>
-                <div style="color: white !important; padding: 2px 0;">✦ Month/Quarter</div>
-                <div style="color: white !important; padding: 2px 0;">✦ Weekend flag</div>
-                <div style="color: white !important; padding: 2px 0;">✦ Pay day proximity</div>
+            <div style="text-align: center; font-size: 0.95rem;">
+                <div style="padding: 2px 0;">✦ Day of week</div>
+                <div style="padding: 2px 0;">✦ Month/Quarter</div>
+                <div style="padding: 2px 0;">✦ Weekend flag</div>
+                <div style="padding: 2px 0;">✦ Pay day proximity</div>
             </div>
         </div>
         """, unsafe_allow_html=True)
     
     with col2:
         st.markdown("""
-        <div style="background: linear-gradient(135deg, #451a03 0%, #1e293b 100%);
+        <div class="api-card" style="background: linear-gradient(135deg, #451a03 0%, #1e293b 100%);
                     padding: 1.5rem; border-radius: 0.75rem; text-align: center; 
                     min-height: 220px; border-left: 4px solid #f59e0b; border: 2px solid #334155;">
-            <h3 style="color: white !important; margin: 0 0 0.5rem 0; font-size: 1.3rem;">🌤️ Weather</h3>
-            <p style="color: white !important; margin: 0.25rem 0;"><b style="color: white !important;">Source:</b> Open-Meteo API</p>
+            <h3 style="margin: 0 0 0.5rem 0; font-size: 1.3rem;">🌤️ Weather</h3>
+            <p style="margin: 0.25rem 0;"><b>Source:</b> Open-Meteo API</p>
             <hr style="border: 1px solid #f59e0b; margin: 0.75rem 0;">
-            <div style="color: white !important; text-align: center; font-size: 0.95rem;">
-                <div style="color: white !important; padding: 2px 0;">✦ Temperature</div>
-                <div style="color: white !important; padding: 2px 0;">✦ Precipitation</div>
-                <div style="color: white !important; padding: 2px 0;">✦ Weather code</div>
-                <div style="color: white !important; padding: 2px 0;">✦ UV Index</div>
+            <div style="text-align: center; font-size: 0.95rem;">
+                <div style="padding: 2px 0;">✦ Temperature</div>
+                <div style="padding: 2px 0;">✦ Precipitation</div>
+                <div style="padding: 2px 0;">✦ Weather code</div>
+                <div style="padding: 2px 0;">✦ UV Index</div>
             </div>
         </div>
         """, unsafe_allow_html=True)
     
     with col3:
         st.markdown("""
-        <div style="background: linear-gradient(135deg, #3b1a5f 0%, #1e293b 100%);
+        <div class="api-card" style="background: linear-gradient(135deg, #3b1a5f 0%, #1e293b 100%);
                     padding: 1.5rem; border-radius: 0.75rem; text-align: center; 
                     min-height: 220px; border-left: 4px solid #a855f7; border: 2px solid #334155;">
-            <h3 style="color: white !important; margin: 0 0 0.5rem 0; font-size: 1.3rem;">🎉 Holidays</h3>
-            <p style="color: white !important; margin: 0.25rem 0;"><b style="color: white !important;">Source:</b> Nager.Date API</p>
+            <h3 style="margin: 0 0 0.5rem 0; font-size: 1.3rem;">🎉 Holidays</h3>
+            <p style="margin: 0.25rem 0;"><b>Source:</b> Nager.Date API</p>
             <hr style="border: 1px solid #a855f7; margin: 0.75rem 0;">
-            <div style="color: white !important; text-align: center; font-size: 0.95rem;">
-                <div style="color: white !important; padding: 2px 0;">✦ Public holidays</div>
-                <div style="color: white !important; padding: 2px 0;">✦ Pre/post holiday</div>
-                <div style="color: white !important; padding: 2px 0;">✦ Special events</div>
-                <div style="color: white !important; padding: 2px 0;">✦ School breaks</div>
+            <div style="text-align: center; font-size: 0.95rem;">
+                <div style="padding: 2px 0;">✦ Public holidays</div>
+                <div style="padding: 2px 0;">✦ Pre/post holiday</div>
+                <div style="padding: 2px 0;">✦ Special events</div>
+                <div style="padding: 2px 0;">✦ School breaks</div>
             </div>
         </div>
         """, unsafe_allow_html=True)
