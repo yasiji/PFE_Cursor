@@ -359,7 +359,7 @@ async def get_store_products(
             )
             
             # Get items_sold_today - prefer inventory.sold_today if available
-            items_sold_today = sales_stats['items_sold_today']
+            items_sold_today = int(sales_stats['items_sold_today'])
             
             # First check if inventory has sold_today field
             if inv and hasattr(inv, 'sold_today') and inv.sold_today is not None and inv.sold_today > 0:
@@ -393,29 +393,26 @@ async def get_store_products(
             
             items_to_preorder = int(recommendation.order_quantity) if recommendation else 0
             
-            # Calculate expiry date from inventory expiry buckets
+            # Get expiry from inventory directly (same logic as inventory endpoint)
             expiry_date = None
             days_until_expiry = None
-            if inv and inv.expiry_buckets:
-                # Calculate earliest expiry date from buckets
-                # Assume items in 1_3 bucket expire in 2 days, 4_7 in 5 days, 8_plus in 10 days
-                if inv.expiry_buckets.get("1_3", 0) > 0:
-                    days_until_expiry = 2
-                elif inv.expiry_buckets.get("4_7", 0) > 0:
-                    days_until_expiry = 5
-                elif inv.expiry_buckets.get("8_plus", 0) > 0:
-                    days_until_expiry = 10
-                
-                if days_until_expiry:
-                    expiry_date = (today + timedelta(days=days_until_expiry)).isoformat()
+            if inv:
+                # Prefer direct expiry_date field
+                if hasattr(inv, 'expiry_date') and inv.expiry_date:
+                    expiry_date = inv.expiry_date.isoformat()
+                    days_until_expiry = (inv.expiry_date - today).days
+                # Fallback to days_until_expiry field
+                elif hasattr(inv, 'days_until_expiry') and inv.days_until_expiry is not None:
+                    days_until_expiry = inv.days_until_expiry
+                    expiry_date = (today + timedelta(days=inv.days_until_expiry)).isoformat()
             
-            # Determine status
+            # Determine product status
             if inv and inv.quantity < 10:
-                status = "low_stock"
+                product_status = "low_stock"
             elif inv and inv.expiry_buckets and inv.expiry_buckets.get("1_3", 0) > 0:
-                status = "expiring"
+                product_status = "expiring"
             else:
-                status = "normal"
+                product_status = "normal"
             
             # Calculate total stock (shelf + backroom)
             if inv:
@@ -434,14 +431,14 @@ async def get_store_products(
                 price=price,
                 current_stock=total_stock,
                 items_sold_today=items_sold_today,
-                items_sold_week=sales_stats['items_sold_week'],
-                items_sold_month=sales_stats['items_sold_month'],
-                expiry_date=inv.expiry_date.isoformat() if inv and inv.expiry_date else expiry_date,
-                days_until_expiry=inv.days_until_expiry if inv and inv.days_until_expiry is not None else days_until_expiry,
+                items_sold_week=int(sales_stats['items_sold_week']),
+                items_sold_month=int(sales_stats['items_sold_month']),
+                expiry_date=expiry_date,
+                days_until_expiry=days_until_expiry,
                 items_on_shelves=shelf_qty,
                 items_to_preorder=items_to_preorder,
                 items_discarded=int(inv.to_discard) if inv and inv.to_discard else 0,
-                status=status
+                status=product_status
             ))
         
         return result
